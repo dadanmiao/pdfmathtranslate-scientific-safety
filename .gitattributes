@@ -1,0 +1,6 @@
+* text=auto eol=lf
+# These byte-for-byte payloads are verified by SHA256 on every platform.
+patches/original/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+patches/patched/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+# Unified-diff context lines intentionally contain a single space.
+patches/review/** whitespace=-blank-at-eol,-blank-at-eof

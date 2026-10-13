@@ -1,0 +1,13 @@
+outputs/
+work/
+local/
+artifacts/
+__pycache__/
+*.pyc
+.venv/
+.env
+config.local.toml
+*.pdf
+*.zip
+*.log
+!tests/fixtures/.gitkeep

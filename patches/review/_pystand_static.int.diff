@@ -1,0 +1,27 @@
+--- a/_pystand_static.int
++++ b/_pystand_static.int
+@@ -1,3 +1,19 @@
++# Keep translation paths short for the Windows launcher.
++import os
++from pathlib import Path
++_pdf2zh_data_dir = Path(os.environ['USERPROFILE']) / 'Documents' / 'Codex' / 'PDFMathTranslate-data'
++_pdf2zh_data_dir.mkdir(parents=True, exist_ok=True)
++os.chdir(_pdf2zh_data_dir)
++
++# Bypass the failing proxy for this provider while keeping HTTPS validation.
++for _proxy_bypass_name in ('NO_PROXY', 'no_proxy'):
++    _proxy_bypass_hosts = os.environ.get(_proxy_bypass_name, '')
++    _proxy_bypass_list = [x.strip() for x in _proxy_bypass_hosts.split(',') if x.strip()]
++    for _proxy_bypass_host in ('api.cloud.pksl.net.cn', 'api.deepseek.com', 'localhost', '127.0.0.1'):
++        if _proxy_bypass_host not in _proxy_bypass_list:
++            _proxy_bypass_list.append(_proxy_bypass_host)
++    os.environ[_proxy_bypass_name] = ','.join(_proxy_bypass_list)
++
+ import sys
+ import pdf2zh_next.main
+ import os
+@@ -30,4 +46,4 @@
+     traceback.print_exc()
+     if WAIT_FOR_INPUT:
+         input("Press Enter to continue...")
+-    sys.exit(1)+    sys.exit(1)

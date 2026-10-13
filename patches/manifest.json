@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-13",
+  "app_version": "2.9.0",
+  "babeldoc_version": "0.6.4",
+  "files": [
+    {
+      "path": "_pystand_static.int",
+      "sha256": "b8ed4d41f3b7ea34a738aa8ffdda90b740f68b1eb5ceb7a4fd4ef6c071e2719f",
+      "original_sha256": "5891703a30ef485965b70ee4c2878b722d5ba1eeb972b7d5e5dd3d99bd437acc"
+    },
+    {
+      "path": "site-packages/pdf2zh_next/gui.py",
+      "sha256": "b70b828bca9ab0bd7856a0bb614aa08a11b22f8d32a31f92fecaebb32c52f5fb",
+      "original_sha256": "d47b753496afd163c14cd658bff32f358214ee64b6ab4d0810839bcfc6d2c10f"
+    },
+    {
+      "path": "site-packages/pdf2zh_next/config/translate_engine_model.py",
+      "sha256": "2db5affd3b495ef7a22c6a54910288fcfa702fd50ed066bf604b50b6bd69e168",
+      "original_sha256": "cacae663b07c7d293dcba01b189b97bc45c1e489141951d3c07ca3ab55693575"
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/high_level.py",
+      "sha256": "a9703284e4a5b9355c4d699667a92184ef94ee4b56ad17817193c22ed9223819",
+      "original_sha256": "50ad29be8a94b564d6cd339b8b24615db641f4f9572730b3abc052b897d92df4"
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/translation_config.py",
+      "sha256": "d72e8ed6c571a2f8bec7185c9ab81bdc91c35744a865bea1e07f15d424d7de77",
+      "original_sha256": "b50bcab18d6ef7185a4d25520320a40ed2a664cfd0470a222d20c090f298b71c"
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/document_il/backend/pdf_creater.py",
+      "sha256": "fa7bd6f6dd4e54c2ecda92ae7ed073c696a3d4af8d1f79ce07a0682f715a1e7c",
+      "original_sha256": "f26dde7df8a8f1a703d9740d01bd64587c6ff6dc6c877c3d845a81c0798e8b54"
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/document_il/midend/il_translator.py",
+      "sha256": "0bffc3afaa6ae2d17933f606e667dfb949c8a06c7f7735523f85f99d537c4c5c",
+      "original_sha256": "0b855f6d26e01c0b75a89f0e28f086dfc43d7b94c4d0e9dcc0b29bd0345481db"
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/document_il/midend/paragraph_finder.py",
+      "sha256": "389d3851bae9c4a3902fb68f9397c6e120b01f4977b85edbeef0ffa1cbbffc91",
+      "original_sha256": "b67ccaf160f8963a60bffb0661dbc1269ab5efd0b699076ea9ef8c5a7e69a1db"
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/document_il/midend/styles_and_formulas.py",
+      "sha256": "44f241f3b548eb9b9a9c4cca2768e580f14641cc028d014973be1c8dabc2bf48",
+      "original_sha256": "5ee979f1c7ef1d48f4a32d9d07402e134f8a8fc91c5bfb5c6ce87d5f3fa2ba1d"
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/document_il/midend/typesetting.py",
+      "sha256": "b0bebe1def7c12f1db58a514449d36ab07c4036684959d414ffa762b3e35c7ad",
+      "original_sha256": "d9b135c263faf23f3811c78c18f74cf1c2aa91eb3d3596eb3d4d657d49a39d61"
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/document_il/utils/scientific_text.py",
+      "sha256": "b364f39d324a4a526fa109d3045bc0bada96a4ac7c4af27e1d943bdf1cd5eb77",
+      "new_file": true
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/document_il/utils/font_preservation.py",
+      "sha256": "7c06bac47fad737ae876e28a13b396295c4479ae5596047032154f2ac0627f07",
+      "new_file": true
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/document_il/utils/scoped_rendering.py",
+      "sha256": "3aae5a59dd6f432ec9520e1c90bbd8b4c6fdf49c1f28dc4267fa4c9d202115ee",
+      "new_file": true
+    },
+    {
+      "path": "site-packages/babeldoc/format/pdf/document_il/utils/render_integrity.py",
+      "sha256": "c7f6918600999d5d61951563d17f6757aa677be799642e6e6ab41a975b19981e",
+      "new_file": true
+    }
+  ],
+  "patch_id": "scientific-safety-2026-10-13"
+}

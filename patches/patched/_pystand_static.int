@@ -1,0 +1,49 @@
+# Keep translation paths short for the Windows launcher.
+import os
+from pathlib import Path
+_pdf2zh_data_dir = Path(os.environ['USERPROFILE']) / 'Documents' / 'Codex' / 'PDFMathTranslate-data'
+_pdf2zh_data_dir.mkdir(parents=True, exist_ok=True)
+os.chdir(_pdf2zh_data_dir)
+
+# Bypass the failing proxy for this provider while keeping HTTPS validation.
+for _proxy_bypass_name in ('NO_PROXY', 'no_proxy'):
+    _proxy_bypass_hosts = os.environ.get(_proxy_bypass_name, '')
+    _proxy_bypass_list = [x.strip() for x in _proxy_bypass_hosts.split(',') if x.strip()]
+    for _proxy_bypass_host in ('api.cloud.pksl.net.cn', 'api.deepseek.com', 'localhost', '127.0.0.1'):
+        if _proxy_bypass_host not in _proxy_bypass_list:
+            _proxy_bypass_list.append(_proxy_bypass_host)
+    os.environ[_proxy_bypass_name] = ','.join(_proxy_bypass_list)
+
+import sys
+import pdf2zh_next.main
+import os
+import babeldoc.assets.assets
+import pathlib
+import asyncio
+import multiprocessing
+
+WAIT_FOR_INPUT = False
+if len(sys.argv) == 1:
+    sys.argv.append("--gui")  # 无参数时自动添加 -i 参数
+    WAIT_FOR_INPUT = True
+
+multiprocessing.set_executable(os.path.join(os.path.dirname(__file__), 'runtime', 'pythonw.exe'))
+
+files = os.listdir(os.path.dirname(__file__))
+for file in files:
+    if file.endswith(".zip") and file.startswith("offline_assets_"):
+        print('find offline_assets_zip file: ', file, ' try restore...')
+        babeldoc.assets.assets.restore_offline_assets_package(pathlib.Path(os.path.dirname(__file__)))
+
+try:
+    code = asyncio.run(pdf2zh_next.main.main())
+    print(f"pdf2zh_next.main.main() return code: {code}")
+    if WAIT_FOR_INPUT:
+        input("Press Enter to continue...")
+    sys.exit(code)
+except Exception:
+    import traceback
+    traceback.print_exc()
+    if WAIT_FOR_INPUT:
+        input("Press Enter to continue...")
+    sys.exit(1)

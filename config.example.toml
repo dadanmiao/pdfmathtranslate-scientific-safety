@@ -1,0 +1,29 @@
+# Template only. Keep the real key in the GUI's private configuration.
+deepseek = true
+
+[basic]
+gui = true
+
+[translation]
+lang_in = "en"
+lang_out = "zh-CN"
+qps = 4
+no_auto_extract_glossary = false
+primary_font_family = "sans-serif"
+
+[pdf]
+no_mono = false
+no_dual = false
+disable_rich_text_translate = true
+translate_table_text = false
+
+[gui_settings]
+share = false
+server_port = 7860
+ui_lang = "zh"
+
+[deepseek_detail]
+translate_engine_type = "DeepSeek"
+deepseek_model = "deepseek-flash"
+deepseek_thinking_mode = "disabled"
+deepseek_enable_json_mode = false
