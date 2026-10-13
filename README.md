@@ -6,14 +6,14 @@
 
 ## 持久部署与复用
 
-软件安装在 `%USERPROFILE%\Documents\Codex\tools\PDFMathTranslate\pdf2zh`，独立于聊天、临时目录及本仓库。通用开发工具优先复用本机已有 Git、GitHub CLI 和该发行版自带的 Python 3.13.3；无需为下一个工程重新安装这些工具。
+软件安装在 `%USERPROFILE%\Documents\Codex\DevTools\apps\PDFMathTranslate\2.9.0-safety-v1\pdf2zh`，独立于聊天、临时目录及本仓库。通用开发工具优先复用本机已有 Git、GitHub CLI 和该发行版自带的 Python 3.13.3；无需为下一个工程重新安装这些工具。
 
-本机维护源码固定放在 `%USERPROFILE%\Documents\Codex\projects\pdfmathtranslate-scientific-safety`。更换聊天不会改变安装或源码位置。
+本机维护源码固定放在 `%USERPROFILE%\Documents\Codex\Projects\pdfmathtranslate-scientific-safety`。更换聊天不会改变安装或源码位置。
 
 | 内容 | 持久位置 |
 | --- | --- |
-| 软件及自带 Python、依赖 | `%USERPROFILE%\Documents\Codex\tools\PDFMathTranslate\pdf2zh` |
-| 独立启动脚本 | `%USERPROFILE%\Documents\Codex\tools\PDFMathTranslate\Start-PDFMathTranslate.ps1` |
+| 软件及自带 Python、依赖 | `%USERPROFILE%\Documents\Codex\DevTools\apps\PDFMathTranslate\2.9.0-safety-v1\pdf2zh` |
+| 独立启动脚本 | `%USERPROFILE%\Documents\Codex\DevTools\apps\PDFMathTranslate\2.9.0-safety-v1\Start-PDFMathTranslate.ps1` |
 | 官方安装包缓存 | 工具目录下的 `downloads` |
 | 部署前文件备份 | 工具目录下的 `patch-backups` |
 | 启动日志 | 工具目录下的 `logs` |
@@ -22,6 +22,8 @@
 | 输入暂存与翻译工作目录 | `%USERPROFILE%\Documents\Codex\PDFMathTranslate-data` |
 
 工程归档时保留这些共享位置。Windows 发行版依赖应使用自己的运行时，不要混入其他工程的 Python 环境。
+
+本次持久部署与验证记录见 [docs/deployment-validation.md](docs/deployment-validation.md)。安装版本及启动命令已登记到 DevTools 的 `registry.json`；`-InstallRoot` 可以复用其他已部署位置。
 
 ## 安装或验证已有安装
 
@@ -38,7 +40,7 @@ cd pdfmathtranslate-scientific-safety
 ```powershell
 ./scripts/Start.ps1
 # 跨工程直接使用，不需要当前仓库：
-& "$env:USERPROFILE\Documents\Codex\tools\PDFMathTranslate\Start-PDFMathTranslate.ps1"
+& "$env:USERPROFILE\Documents\Codex\DevTools\apps\PDFMathTranslate\2.9.0-safety-v1\Start-PDFMathTranslate.ps1"
 ```
 
 打开 http://127.0.0.1:7860/，上传 PDF 并点击“翻译”。页面底部显示“科研文档保护：已启用（本地修复版 1）”。
@@ -82,7 +84,7 @@ cd pdfmathtranslate-scientific-safety
 软件升级可能覆盖修复。更新到其他版本前，重新适配补丁并测试，不能直接强行覆盖。回滚前关闭该软件：
 
 ```powershell
-& "$env:USERPROFILE\Documents\Codex\tools\PDFMathTranslate\pdf2zh\runtime\python.exe" ./scripts/manage_patch.py restore --app-dir "$env:USERPROFILE\Documents\Codex\tools\PDFMathTranslate\pdf2zh"
+& "$env:USERPROFILE\Documents\Codex\DevTools\apps\PDFMathTranslate\2.9.0-safety-v1\pdf2zh\runtime\python.exe" ./scripts/manage_patch.py restore --app-dir "$env:USERPROFILE\Documents\Codex\DevTools\apps\PDFMathTranslate\2.9.0-safety-v1\pdf2zh"
 ```
 
 回滚只还原清单中的代码文件，并保存被替换的内容，私人设置仍保留。需要重新启用修复时，再执行 `scripts/Install.ps1`。

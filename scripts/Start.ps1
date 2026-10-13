@@ -1,4 +1,4 @@
-param([string]$InstallRoot = (Join-Path $env:USERPROFILE 'Documents/Codex/tools/PDFMathTranslate'))
+param([string]$InstallRoot = (Join-Path $env:USERPROFILE 'Documents/Codex/DevTools/apps/PDFMathTranslate/2.9.0-safety-v1'))
 $ErrorActionPreference = 'Stop'
 $appDirectory = Join-Path $InstallRoot 'pdf2zh'
 $appExe = Join-Path $appDirectory 'pdf2zh.exe'

@@ -1,5 +1,5 @@
 param(
-    [string]$InstallRoot = (Join-Path $env:USERPROFILE 'Documents/Codex/tools/PDFMathTranslate'),
+    [string]$InstallRoot = (Join-Path $env:USERPROFILE 'Documents/Codex/DevTools/apps/PDFMathTranslate/2.9.0-safety-v1'),
     [switch]$Pipeline,
     [string]$SourcePdf
 )
