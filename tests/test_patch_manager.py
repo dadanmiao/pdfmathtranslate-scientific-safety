@@ -68,6 +68,14 @@ class PatchManagerTests(unittest.TestCase):
             manager.manage(self.app, "apply", self.bundle)
         self.assertEqual(self.target.read_bytes(), b"old\n")
 
+    def test_known_previous_patch_can_be_upgraded(self):
+        previous = b'previous patch\n'
+        self.target.write_bytes(previous)
+        self.manifest['files'][0]['previous_sha256'] = [hashlib.sha256(previous).hexdigest()]
+        self.save_manifest()
+        manager.manage(self.app, 'apply', self.bundle)
+        self.assertEqual(self.target.read_bytes(), b'new\n')
+
     def test_other_release_is_refused(self):
         metadata = self.app / "site-packages/babeldoc-0.6.4.dist-info/METADATA"
         metadata.write_text("Version: 0.7.0\n")

@@ -2,6 +2,7 @@ import io
 import re
 import sys
 import unittest
+import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -31,6 +32,40 @@ def paragraph(characters):
 
 
 class ScientificSafetyTests(unittest.TestCase):
+    def test_original_symbol_mapping_difference_is_allowed_only_if_glyph_is_preserved(self):
+        from babeldoc.format.pdf.document_il import PdfFont
+        from babeldoc.format.pdf.document_il.utils.render_integrity import validate_rendered_text
+
+        def symbol_document(value):
+            document = fitz.open()
+            page = document.new_page()
+            page.insert_text((50, 80), value, fontname='symb', fontsize=12)
+            document.xref_set_key(page.get_fonts()[0][0], 'Encoding', 'null')
+            return fitz.open(stream=document.tobytes(), filetype='pdf')
+
+        source = symbol_document('ã')
+        raw = source[0].get_text('rawdict')['blocks'][0]['lines'][0]['spans'][0]['chars'][0]
+        self.assertEqual(raw['c'], '\uf8e9')
+        box = Box(x=raw['bbox'][0], y=0, x2=raw['bbox'][2], y2=source[0].rect.height-raw['bbox'][1])
+        planned = PdfCharacter(char_unicode='ª', pdf_character_id=227, pdf_style=PdfStyle(font_id='F11', font_size=12), box=box)
+        page_il = SimpleNamespace(page_number=0, pdf_character=[planned], pdf_paragraph=[], pdf_font=[PdfFont(name='Symbol', font_id='F11')], pdf_xobject=[])
+        document_il = SimpleNamespace(page=[page_il])
+        with tempfile.TemporaryDirectory(dir=root) as directory:
+            source_path = Path(directory) / 'source.pdf'
+            source.save(source_path)
+            validate_rendered_text(source, document_il, source_path)
+            changed = symbol_document('â')
+            with self.assertRaises(TranslationIntegrityError):
+                validate_rendered_text(changed, document_il, source_path)
+            empty = fitz.open(); empty.new_page()
+            with self.assertRaises(TranslationIntegrityError):
+                validate_rendered_text(empty, document_il, source_path)
+            skipped = PdfCharacter(char_unicode='ª', pdf_character_id=None, pdf_style=PdfStyle(font_id='F11', font_size=12), box=box)
+            missing_text = PdfCharacter(char_unicode='a', pdf_character_id=1, pdf_style=PdfStyle(font_id='other', font_size=12), box=box)
+            page_il.pdf_character = [skipped, missing_text]
+            with self.assertRaises(TranslationIntegrityError):
+                validate_rendered_text(source, document_il, source_path)
+
     def test_added_font_text_map_preserves_ascii_hyphen_and_pixels(self):
         from collections import Counter
         doc = fitz.open()

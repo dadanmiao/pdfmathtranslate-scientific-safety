@@ -54,8 +54,8 @@ def manage(app, mode, bundle=None):
             if current != entry["sha256"]:
                 raise ValueError(f"Patch is missing or changed: {relative}")
             continue
-        if current not in (original, entry["sha256"]):
-            raise ValueError(f"Local file differs from both supported versions: {relative}")
+        if current not in (original, entry["sha256"], *entry.get("previous_sha256", [])):
+            raise ValueError(f"Local file does not match any supported version: {relative}")
         if mode == "apply":
             if current == entry["sha256"]:
                 continue

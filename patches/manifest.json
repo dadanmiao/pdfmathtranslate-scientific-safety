@@ -30,8 +30,11 @@
     },
     {
       "path": "site-packages/babeldoc/format/pdf/document_il/backend/pdf_creater.py",
-      "sha256": "fa7bd6f6dd4e54c2ecda92ae7ed073c696a3d4af8d1f79ce07a0682f715a1e7c",
-      "original_sha256": "f26dde7df8a8f1a703d9740d01bd64587c6ff6dc6c877c3d845a81c0798e8b54"
+      "sha256": "bc1cb066fff5de2883840bdfdd85831b6ecdf95f36bec96a3fbd67b483bdd354",
+      "original_sha256": "f26dde7df8a8f1a703d9740d01bd64587c6ff6dc6c877c3d845a81c0798e8b54",
+      "previous_sha256": [
+        "fa7bd6f6dd4e54c2ecda92ae7ed073c696a3d4af8d1f79ce07a0682f715a1e7c"
+      ]
     },
     {
       "path": "site-packages/babeldoc/format/pdf/document_il/midend/il_translator.py",
@@ -70,8 +73,12 @@
     },
     {
       "path": "site-packages/babeldoc/format/pdf/document_il/utils/render_integrity.py",
-      "sha256": "c7f6918600999d5d61951563d17f6757aa677be799642e6e6ab41a975b19981e",
-      "new_file": true
+      "sha256": "5845bbbe881ac48aac39af830a7a482e819a11d3fd0ba516cd0717bdaa59689a",
+      "new_file": true,
+      "previous_sha256": [
+        "c7f6918600999d5d61951563d17f6757aa677be799642e6e6ab41a975b19981e",
+        "fea9a0c15e87748261074f43002dc7a3f6a4856667af0bf41dcc008f61f77b10"
+      ]
     }
   ],
   "patch_id": "scientific-safety-2026-10-13"
