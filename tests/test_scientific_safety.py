@@ -32,6 +32,74 @@ def paragraph(characters):
 
 
 class ScientificSafetyTests(unittest.TestCase):
+    def test_bitmap_only_line_is_kept_between_neighboring_text_lines(self):
+        from babeldoc.format.pdf.document_il import PdfForm, PdfFormSubtype, PdfInlineForm, PdfLine
+        from babeldoc.format.pdf.document_il.midend.styles_and_formulas import StylesAndFormulas
+        first = chars('above', y=20, xobj=0)
+        second = chars('below', y=0, xobj=0)
+        lines = [PdfLine(box=Box(0, 20, 25, 30), pdf_character=first),
+                 PdfLine(box=Box(0, 0, 25, 10), pdf_character=second)]
+        host = PdfParagraph(box=Box(0, 0, 25, 30), debug_id='text', xobj_id=0,
+                            pdf_paragraph_composition=[PdfParagraphComposition(pdf_line=line) for line in lines])
+        subtype = PdfFormSubtype(pdf_inline_form=PdfInlineForm())
+        images = [PdfForm(box=Box(x, 11, x+4, 19), xobj_id=0, pdf_form_subtype=subtype) for x in (1, 7)]
+        page = SimpleNamespace(pdf_paragraph=[host], pdf_form=images.copy(), page_layout=[])
+        StylesAndFormulas.attach_image_formula_lines(StylesAndFormulas.__new__(StylesAndFormulas), page)
+        self.assertIs(host.pdf_paragraph_composition[0].pdf_line, lines[0])
+        self.assertEqual(host.pdf_paragraph_composition[1].pdf_formula.pdf_form, images)
+        self.assertIs(host.pdf_paragraph_composition[2].pdf_line, lines[1])
+        self.assertFalse(page.pdf_form)
+
+    def test_inline_image_formula_is_grouped_and_large_illustrations_are_untouched(self):
+        from babeldoc.format.pdf.document_il import PdfForm, PdfFormSubtype, PdfInlineForm, PdfLine
+        from babeldoc.format.pdf.document_il.midend.styles_and_formulas import StylesAndFormulas
+        text = chars('ab', x=0, xobj=0) + chars('cd', x=30, xobj=0)
+        line = PdfLine(pdf_character=text)
+        host = PdfParagraph(box=Box(0, 0, 40, 10), debug_id='text', xobj_id=0, pdf_paragraph_composition=[PdfParagraphComposition(pdf_line=line)])
+        def image(box):
+            return PdfForm(box=box, xobj_id=0, pdf_form_subtype=PdfFormSubtype(pdf_inline_form=PdfInlineForm()))
+        base = image(Box(12, 1, 18, 9))
+        subscript = image(Box(18, 0, 21, 4))
+        illustration = image(Box(60, 0, 160, 100))
+        page = SimpleNamespace(pdf_paragraph=[host], pdf_form=[base, subscript, illustration], page_layout=[])
+        StylesAndFormulas.attach_inline_image_formulas(StylesAndFormulas.__new__(StylesAndFormulas), page)
+        formula = next(c.pdf_formula for c in host.pdf_paragraph_composition if c.pdf_formula)
+        self.assertEqual(formula.pdf_form, [base, subscript])
+        self.assertEqual((formula.box.x, formula.box.y, formula.box.x2, formula.box.y2), (12, 0, 21, 9))
+        self.assertEqual(page.pdf_form, [illustration])
+        self.assertEqual(''.join(c.char_unicode for p in host.pdf_paragraph_composition if p.pdf_line for c in p.pdf_line.pdf_character), 'abcd')
+
+    def test_inline_bitmap_inside_parser_inserted_gap_is_preserved(self):
+        from babeldoc.format.pdf.document_il import PdfForm, PdfFormSubtype, PdfInlineForm, PdfLine
+        from babeldoc.format.pdf.document_il.midend.styles_and_formulas import StylesAndFormulas
+        gap = chars(' ', x=10, xobj=None)[0]
+        gap.pdf_character_id = None
+        gap.box.x2 = gap.visual_bbox.box.x2 = 30
+        text = chars('ab', x=0, xobj=0) + [gap] + chars('cd', x=30, xobj=0)
+        line = PdfLine(pdf_character=text)
+        host = PdfParagraph(box=Box(0, 0, 40, 10), debug_id='text', xobj_id=0,
+                            pdf_paragraph_composition=[PdfParagraphComposition(pdf_line=line)])
+        image = PdfForm(box=Box(13, 1, 25, 9), xobj_id=0,
+                        pdf_form_subtype=PdfFormSubtype(pdf_inline_form=PdfInlineForm()))
+        page = SimpleNamespace(pdf_paragraph=[host], pdf_form=[image], page_layout=[])
+        StylesAndFormulas.attach_inline_image_formulas(StylesAndFormulas.__new__(StylesAndFormulas), page)
+        self.assertEqual(host.pdf_paragraph_composition[1].pdf_formula.pdf_form, [image])
+        self.assertEqual(''.join(c.char_unicode for p in host.pdf_paragraph_composition if p.pdf_line for c in p.pdf_line.pdf_character), 'abcd')
+
+    def test_small_image_inside_figure_layout_is_not_relocated(self):
+        from babeldoc.format.pdf.document_il import PdfForm, PdfFormSubtype, PdfInlineForm, PdfLine
+        from babeldoc.format.pdf.document_il.midend.styles_and_formulas import StylesAndFormulas
+        text = chars('ab', x=0, xobj=0) + chars('cd', x=30, xobj=0)
+        host = PdfParagraph(box=Box(0, 0, 40, 10), debug_id='text', xobj_id=0,
+                            pdf_paragraph_composition=[PdfParagraphComposition(pdf_line=PdfLine(pdf_character=text))])
+        image = PdfForm(box=Box(13, 1, 25, 9), xobj_id=0,
+                        pdf_form_subtype=PdfFormSubtype(pdf_inline_form=PdfInlineForm()))
+        page = SimpleNamespace(pdf_paragraph=[host], pdf_form=[image],
+                               page_layout=[SimpleNamespace(class_name='figure', box=Box(10, 0, 28, 10))])
+        StylesAndFormulas.attach_inline_image_formulas(StylesAndFormulas.__new__(StylesAndFormulas), page)
+        self.assertEqual(page.pdf_form, [image])
+        self.assertEqual(len(host.pdf_paragraph_composition), 1)
+
     def test_original_symbol_mapping_difference_is_allowed_only_if_glyph_is_preserved(self):
         from babeldoc.format.pdf.document_il import PdfFont
         from babeldoc.format.pdf.document_il.utils.render_integrity import validate_rendered_text

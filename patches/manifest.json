@@ -48,13 +48,19 @@
     },
     {
       "path": "site-packages/babeldoc/format/pdf/document_il/midend/styles_and_formulas.py",
-      "sha256": "44f241f3b548eb9b9a9c4cca2768e580f14641cc028d014973be1c8dabc2bf48",
-      "original_sha256": "5ee979f1c7ef1d48f4a32d9d07402e134f8a8fc91c5bfb5c6ce87d5f3fa2ba1d"
+      "sha256": "50509b46be1d422c02943704dc3c42ceb83c522e3c59f22a42401a882229eefe",
+      "original_sha256": "5ee979f1c7ef1d48f4a32d9d07402e134f8a8fc91c5bfb5c6ce87d5f3fa2ba1d",
+      "previous_sha256": [
+        "44f241f3b548eb9b9a9c4cca2768e580f14641cc028d014973be1c8dabc2bf48"
+      ]
     },
     {
       "path": "site-packages/babeldoc/format/pdf/document_il/midend/typesetting.py",
-      "sha256": "b0bebe1def7c12f1db58a514449d36ab07c4036684959d414ffa762b3e35c7ad",
-      "original_sha256": "d9b135c263faf23f3811c78c18f74cf1c2aa91eb3d3596eb3d4d657d49a39d61"
+      "sha256": "89e624e438de1570702bbc944c462796588933364d03a2b9b3a6aadcee40818a",
+      "original_sha256": "d9b135c263faf23f3811c78c18f74cf1c2aa91eb3d3596eb3d4d657d49a39d61",
+      "previous_sha256": [
+        "b0bebe1def7c12f1db58a514449d36ab07c4036684959d414ffa762b3e35c7ad"
+      ]
     },
     {
       "path": "site-packages/babeldoc/format/pdf/document_il/utils/scientific_text.py",

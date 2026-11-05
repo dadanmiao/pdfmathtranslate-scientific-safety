@@ -68,6 +68,11 @@ def fixture():
         p.insert_text((x+25,130),".",fontsize=11)
         p.insert_text((50,180),"A 0.18 µm process consumes 2.7 µW at 1 V.",fontsize=11)
         p.insert_text((50,220),"CLK_BLF_CMD and DATA_OUT are technical signal names.",fontsize=11)
+        p.insert_text((50,270),"The value of",fontsize=11)
+        p.insert_text((125,270),"is measured.",fontsize=11)
+        stream = p.get_contents()[0]
+        doc.update_stream(stream, doc.xref_stream(stream) +
+            b'\nq 9 0 0 9 110 523 cm BI /W 8 /H 8 /BPC 1 /IM true ID \x00\x18\x3c\x7e\x7e\x3c\x18\x00 EI Q\n')
         p.show_pdf_page(fitz.Rect(120,350,470,385),math,0,keep_proportion=False)
         p.insert_text((50,740),f"Regression page {i+1}",fontsize=8)
     doc.save(path,garbage=4,deflate=True)
@@ -95,6 +100,14 @@ def run(input_file,invalid=False):
     output=fitz.open(result.mono_pdf_path)
     assert len(output)==len(fitz.open(input_file))
     assert all("\x00" not in p.get_text() and "\ufffd" not in p.get_text() for p in output)
+    if input_file.name == "scientific-fixture.pdf":
+        source_doc=fitz.open(input_file)
+        for source_page, translated_page in zip(source_doc, output):
+            inline = lambda page: sum(1 for block in page.get_text('dict')['blocks'] if block['type'] == 1 and block['width'] == 8 and block['height'] == 8)
+            assert inline(source_page) == inline(translated_page) == 1, "Inline formula image was lost or duplicated"
+        tracking=json.loads((out / 'ir' / input_file.stem / 'translate_tracking.json').read_text(encoding='utf8'))
+        items=[paragraph for group in tracking['cross_page'] for paragraph in group['paragraph']]
+        assert any(re.search(r'The value of\s*\{v\d+\}\s*is measured', item['input']) for item in items), "Inline formula was not submitted as a placeholder"
     if input_file.stem=="source":
         before=fitz.open(input_file)
         pattern=r"(?<![A-Za-z])mm(?![A-Za-z])"
